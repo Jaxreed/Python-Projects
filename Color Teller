@@ -1,0 +1,90 @@
+# Author: Jackson Sanchez
+# ULID: C00545459
+# Course/Section: CMPS 150 – Lecture Section # 3
+# Assignment: pa4
+# Date Assigned: Monday, October 20, 2025
+# Date/Time Due: Saturday, October 25, 2025 –- 11:59 pm
+#
+# Description: This program uses string processing methods to extract and analyze
+# information from a color code written in hexadecimal (RGB) format
+# and uses tkinter to view the color in a small window.
+
+
+
+# ---- Program Start ----
+
+# Import tkinter for optional color display
+import tkinter as tk
+
+# Function to validate hexadecimal color input
+def is_valid_hex(code):
+    valid_hex_digits = "0123456789ABCDEF"
+    if len(code) != 6:
+        print("Sorry, that is not a valid length.")
+        return False
+    for digit in code:
+        if digit not in valid_hex_digits:
+            print("Sorry, that is not a valid number.")
+            return False
+    return True
+
+
+# ---- Input Section ----
+user_input = input("Enter a hex color code: #")
+user_input = user_input.upper()  # ensure consistency
+
+if not is_valid_hex(user_input):
+    quit()
+
+# ---- Processing Section ----
+red_hex = user_input[0:2]
+green_hex = user_input[2:4]
+blue_hex = user_input[4:6]
+
+red_dec = int(red_hex, 16)
+green_dec = int(green_hex, 16)
+blue_dec = int(blue_hex, 16)
+
+# ---- Output Section ----
+print("\nColor    Hex    Decimal")
+print("-------------------------")
+print(f"Red      {red_hex:>2}     {red_dec:>3}")
+print(f"Green    {green_hex:>2}     {green_dec:>3}")
+print(f"Blue     {blue_hex:>2}     {blue_dec:>3}")
+print()
+
+# ---- Determine Color Type ----
+if red_dec == green_dec == blue_dec:
+    print("This color is balanced →      Neutral.")
+elif red_dec > green_dec and red_dec > blue_dec:
+    print("This color is mostly red →       Warm.")
+elif green_dec > red_dec and green_dec > blue_dec:
+    print("This color is mostly green →       Calm.")
+elif blue_dec > red_dec and blue_dec > green_dec:
+    print("This color is mostly blue → ❄ Cool.")
+else:
+    print("This color is a mix and doesn’t fit a single category.")
+
+# ---- Ask to Display Color ----
+show_color = input(f"\nWould you like to display the color #{user_input} (y/n)? ")
+
+if show_color.lower() == "y":
+    # ---- Tkinter Window ----
+    # Import tkinter as tk creates a shortcut for easier reference.
+    # Create the main window where widgets will be placed.
+    window = tk.Tk()
+
+    # Set a title for the window to identify its purpose.
+    window.title("Color Viewer")
+
+    # Create a frame widget with background color set to the chosen hex color.
+    # Width and height define the display size of the color area.
+    frame = tk.Frame(window, bg="#" + user_input, width=200, height=200)
+    frame.pack(padx=20, pady=20)  # Add padding around the frame for spacing.
+
+    # Create a label that shows the color code being displayed in the window.
+    label = tk.Label(window, text=f"Color: #{user_input}", font=("Arial", 14))
+    label.pack()  # Place the label in the window below the color frame.
+
+    # Start the Tkinter event loop so the window remains open and responsive.
+    window.mainloop()
