@@ -1,0 +1,105 @@
+# Author: Jackson Sanchez
+# ULID: C00545459
+# Course/Section: CMPS 150 – Lecture Section # 3
+# Assignment: pa5
+# Date Assigned: Wednesday, November 5, 2025
+# Date/Time Due: Sunday, November 9, 2025 –- 11:59 pm
+#
+# Description: This program displays a menu that lets the user explore number
+# properties such as Spy, Buzz, Evil/Odious, and view a Collatz
+# sequence.
+
+
+def spy_number():
+    print("\n----------------------Spy Number--------------------")
+    print("The Sum of digits equals the product of digits.")
+    print("----------------------------------------------------")
+    num = int(input("Enter a positive integer: "))
+    digits = [int(d) for d in str(num)]
+    total_sum = sum(digits)
+    total_product = 1
+    for d in digits:
+        total_product *= d
+    spy = "Yes" if total_sum == total_product else "No"
+    print(f"Number.............{num}")
+    print(f"Sum of Digits......{total_sum}")
+    print(f"Product of Digits..{total_product}")
+    print(f"Spy................{spy}\n")
+
+def buzz_number():
+    print("\n---------------------Buzz Number--------------------")
+    print("The number either ends in the digit 7 or is")
+    print("perfectly divisible by 7.")
+    print("----------------------------------------------------")
+    num = int(input("Enter a positive integer: "))
+    if num % 7 == 0 or num % 10 == 7:
+        buzz = "Yes"
+    else:
+        buzz = "No"
+    print(f"Number..{num}")
+    print(f"Buzz....{buzz}\n")
+
+def evil_odious_number():
+    print("\n-------------------Evil/Odious Number---------------")
+    print("The binary form of the number has an even (evil)")
+    print("or odd (odious) number of 1-bits.")
+    print("---------------------------------------------------")
+    num = int(input("Enter a positive integer: "))
+    binary = bin(num)
+    ones_count = binary.count("1")
+    if ones_count % 2 == 0:
+        eo = "Evil"
+    else:
+        eo = "Odious"
+    print(f"Number.........{num}")
+    print(f"Binary.........{binary}")
+    print(f"One count......{ones_count}")
+    print(f"Evil/Odious....{eo}\n")
+
+def collatz_sequence():
+    print("\n------------------Collatz Sequence------------------")
+    print("A sequence of numbers that concludes at 1, where the")
+    print("next value is number//2 (even) and 3*number+1 (odd)")
+    print("----------------------------------------------------")
+    num = int(input("Enter a positive integer: "))
+    count = 0
+    print("\nSequence.....")
+    while num != 1:
+        print(num)
+        if num % 2 == 0:
+            num = num // 2
+        else:
+            num = 3 * num + 1
+        count += 1
+    print(1)
+    print("----------------------------------------------------")
+    print(f"Number......{num}")
+    print(f"Iterations..{count}\n")
+
+def main():
+    while True:
+        print("Number Properties")
+        print("---------------------")
+        print("1. Spy number")
+        print("2. Buzz number")
+        print("3. Evil/Odious number")
+        print("4. Collatz sequence")
+        print("5. Quit\n")
+
+        choice = input("Enter your selection: ")
+
+        if choice == "1":
+            spy_number()
+        elif choice == "2":
+            buzz_number()
+        elif choice == "3":
+            evil_odious_number()
+        elif choice == "4":
+            collatz_sequence()
+        elif choice == "5":
+            break
+        else:
+            print("\nInvalid input...try again\n")
+
+if __name__ == "__main__":
+    main()
