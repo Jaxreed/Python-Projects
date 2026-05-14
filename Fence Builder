@@ -1,0 +1,40 @@
+# Author: Jackson Sanchez
+# ULID: C00545459
+# Course/Section: CMPS 150 – Lecture Section # 003
+# Assignment: pa1
+# Date Assigned: Friday, September 12, 2025
+# Date/Time Due: Thursday, September 18, 2025 –- 11:59 pm
+#
+# Description: This program calculates the number of boards needed to build a
+# fence based on user input values for the fence length, board width,
+# and spacing between boards.
+
+
+print()
+
+print("This program is to help you build a fence")
+FenceLength = float(input("How long is the fence in feet?: "))
+BoardWidth = float(input("How wide in inches are the boards you're using?: "))
+Space = float(input("How much space is between each board in inches: "))
+
+FenceInches = FenceLength * 12
+Width = BoardWidth + Space
+
+BoardExact = FenceInches / Width
+Remaining = FenceInches % Width
+BoardWhole = FenceInches // Width
+
+Gaps = (BoardWhole * BoardWidth) / 12
+print()
+print()
+print("*************************************************")
+print("           Fence Estimate Summary")
+print("*************************************************")
+print(f"Length of fence (feet):    {FenceLength}")
+print(f"Width of boards (inches):  {BoardWidth}")
+print(f"Spacing (inches):          {Space}")
+print("--------------------------------------------------")
+print(f"Required boards (exact):   {BoardExact}")
+print(f"Required boards (whole):   {BoardWhole}")
+print(f"Remainging space (Inches): {Remaining}")
+print(f"Total linear feet of wood: {Gaps :.1f}")
