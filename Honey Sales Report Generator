@@ -1,0 +1,146 @@
+# Author: Jackson Sanchez
+# ULID: c00545459
+# Course/Section: CMPS 150 – Lecture Section # 3
+# Assignment: pa6
+# Date Assigned: Wednesday, November 11, 2025
+# Date/Time Due: Monday, November 17, 2025
+#
+# Description: This program reads customer order data from a file, calculates honey
+# sales totals using given pricing and tax rules, and produces a
+# neatly formatted report.
+
+
+def main():
+    INPUT_FILE = "HoneySales.py"
+    UNIT_PRICE = 10
+    TAX_RATE = 0.08
+
+    # accumulators
+    total_customers = 0
+    total_tax_exempt = 0
+    total_jars = 0
+    total_paid_jars = 0
+    total_free_jars = 0
+    total_pretax = 0
+    total_tax = 0.0
+    total_final = 0.0
+
+    # largest order tracking
+    largest_company = ""
+    largest_jars = -1
+    largest_pretax = 0
+
+    rows = []
+
+    try:
+        with open(INPUT_FILE, "r", encoding="utf-8") as f:
+            lines = [line.rstrip("\n") for line in f]
+    except FileNotFoundError:
+        print(f"Error: could not open input file '{INPUT_FILE}'.")
+        return
+
+    # Process records 3 lines at a time
+    i = 0
+    while i + 2 < len(lines):
+        company = lines[i].strip()
+        acct = lines[i + 1].strip()
+        try:
+            jars_ordered = int(lines[i + 2].strip())
+        except ValueError:
+            # If number parsing fails, skip this record
+            i += 3
+            continue
+
+        # Calculations
+        free_jars = jars_ordered // 6
+        paid_jars = jars_ordered - free_jars
+        pretax_cost = paid_jars * UNIT_PRICE
+        if acct.upper().startswith("T"):
+            tax = pretax_cost * TAX_RATE
+        else:
+            tax = 0.0
+
+        final_cost = pretax_cost + tax
+
+        # Save row
+        rows.append({
+            "company": company,
+            "acct": acct,
+            "ordered": jars_ordered,
+            "paid": paid_jars,
+            "free": free_jars,
+            "pretax": pretax_cost,
+            "tax": tax,
+            "final": final_cost
+        })
+
+        # Accumulate totals
+        total_customers += 1
+        if acct.upper().startswith("N"):
+            total_tax_exempt += 1
+        total_jars += jars_ordered
+        total_paid_jars += paid_jars
+        total_free_jars += free_jars
+        total_pretax += pretax_cost
+        total_tax += tax
+        total_final += final_cost
+
+        # Largest order check
+        if jars_ordered > largest_jars:
+            largest_jars = jars_ordered
+            largest_company = company
+            largest_pretax = pretax_cost
+
+        i += 3
+
+    # Print table header
+    print("Company                  Acct      Jars     Paid   Free   Pretax      Tax     Final")
+    print("                         Number    Ordered  Jars   Jars   Cost($)     ($)     Cost($)")
+    print("-------------------------------------------------------------------------------------")
+
+    # Row format:
+    # company: left-just 22
+    # acct: left-just 5 (but we keep a small field)
+    # ordered: right width 8
+    # paid: right width 6
+    # free: right width 6
+    # pretax: right width 9 (integer)
+    # tax: right width 8 with 2 decimals (minimum 7.2f requested; using width 7 or 8)
+    # final: right width 9 with 2 decimals
+    for r in rows:
+        company = r["company"][:22]
+        acct = r["acct"]
+        ordered = r["ordered"]
+        paid = r["paid"]
+        free = r["free"]
+        pretax = r["pretax"]
+        tax = r["tax"]
+        final = r["final"]
+
+        # Build formatted line
+        line = f"{company:<22} {acct:<5}{ordered:9d}{paid:7d}{free:7d}{pretax:9d}{tax:8.2f}{final:9.2f}"
+        print(line)
+
+    print("-------------------------------------------------------------------------------------")
+
+    # Totals row: label in Company column, blank acct
+    totals_line = f"{'Totals':<22} {'':5}{total_jars:9d}{total_paid_jars:7d}{total_free_jars:7d}{total_pretax:9d}{total_tax:8.2f}{total_final:9.2f}"
+    print(totals_line)
+    print()
+    # Summary
+    print("Order Summary")
+    print("---------------------------------------------")
+    print(f"Number of Customers......{total_customers}")
+    print(f"Number of Tax Exempt.....{total_tax_exempt}")
+    avg_jars = (total_jars / total_customers) if total_customers > 0 else 0.0
+    print(f"Average Jars Purchased...{avg_jars:.2f}")
+    print("Largest Order:")
+    if largest_company:
+        print(f"  Company Name...........{largest_company}")
+        print(f"  Jars Purchased.........{largest_jars}")
+        print(f"  PreTax Cost............$ {largest_pretax}")
+    else:
+        print("  No orders processed.")
+
+if __name__ == "__main__":
+    main()
