@@ -1,0 +1,101 @@
+# Author: Jackson Sanchez
+# ULID: C00545459
+# Course/Section: CMPS 150 – Lecture Section # 3
+# Assignment: pa7
+# Date Assigned: Friday, November 20, 2025
+# Date/Time Due: Wednesday, November 26, 2025 –- 11:59 pm
+#
+# Description: This program reads a text file, analyzes each line, and prints a
+# formatted table of character, word, and punctuation counts.
+
+
+# ----------------------------------------------------------
+# Print table header
+# ----------------------------------------------------------
+def print_header():
+    print("Text File Analysis")
+    print("=================================================")
+    print("Line    Chars    Words        .        ?       !")
+    print("-------------------------------------------------")
+
+
+# ----------------------------------------------------------
+# Count non-space characters
+# ----------------------------------------------------------
+def count_chars(line):
+    count = 0
+    for ch in line:
+        if ch != " ":
+            count += 1
+    return count
+
+
+# ----------------------------------------------------------
+# Count words in a line
+# ----------------------------------------------------------
+def count_words(line):
+    count = 0
+    in_word = False
+
+    for ch in line:
+        if ch != " " and not in_word:
+            count += 1
+            in_word = True
+        elif ch == " ":
+            in_word = False
+
+    return count
+
+
+# ----------------------------------------------------------
+# Count a specific character (cannot use .count())
+# ----------------------------------------------------------
+def count_specific(line, target):
+    count = 0
+    for ch in line:
+        if ch == target:
+            count += 1
+    return count
+
+
+# ----------------------------------------------------------
+# main function
+# ----------------------------------------------------------
+def main():
+    filename = input("Enter a filename: ")
+    infile = open(filename, "r")
+
+    print_header()
+
+    total_chars = 0
+    total_words = 0
+    total_periods = 0
+    total_questions = 0
+    total_exclaims = 0
+
+    line_num = 1
+
+    for line in infile:
+        chars = count_chars(line)
+        words = count_words(line)
+        periods = count_specific(line, ".")
+        questions = count_specific(line, "?")
+        exclaims = count_specific(line, "!")
+
+        total_chars += chars
+        total_words += words
+        total_periods += periods
+        total_questions += questions
+        total_exclaims += exclaims
+
+        print(f"{line_num:>4}{chars:>9}{words:>10}{periods:>9}{questions:>8}{exclaims:>8}")
+        line_num += 1
+
+    print("-------------------------------------------------")
+    print(f"Totals:{total_chars:>6}{total_words:>9}{total_periods:>9}{total_questions:>8}{total_exclaims:>8}")
+
+    infile.close()
+
+
+# ----------------------------------------------------------
+main()
